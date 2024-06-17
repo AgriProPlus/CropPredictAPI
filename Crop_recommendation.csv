@@ -15,34 +15,7 @@ N,P,K,temperature,humidity,ph,rainfall,label
 93,56,36,24.01497622,82.05687182,6.98435366,185.2773389,rice
 94,50,37,25.66585205,80.66385045,6.94801983,209.5869708,rice
 60,48,39,24.28209415,80.30025587,7.042299069,231.0863347,rice
-85,38,41,21.58711777,82.7883708,6.249050656,276.6552459,rimport numpy as np
-from flask import Flask, request, jsonify
-from tensorflow.keras.models import load_model
-import pandas as pd
-
-# Load the model
-model = load_model('crop_recommendation_model.h5')
-
-# Load the label categories
-df = pd.read_csv('Crop_recommendation.csv')
-df['label'] = pd.Categorical(df['label'])
-categories = df['label'].cat.categories
-
-app = Flask(__name__)
-
-@app.route('/predict', methods=['POST'])
-def predict():
-    data = request.json
-    conditions = np.array([data['N'], data['P'], data['K'], data['temperature'], data['humidity'], data['pH'], data['rainfall']]).reshape(1, 7)
-    prediction = model.predict(conditions)
-    predicted_class = np.argmax(prediction, axis=1)
-    crop = categories[predicted_class[0]]
-    return jsonify({'recommended_crop': crop})
-
-if __name__ == '__main__':
-    app.run(debug=True)
-
-ice
+85,38,41,21.58711777,82.7883708,6.249050656,276.6552459,rice
 91,35,39,23.79391957,80.41817957,6.970859754,206.2611855,rice
 77,38,36,21.8652524,80.1923008,5.953933276,224.5550169,rice
 88,35,40,23.57943626,83.58760316,5.85393208,291.2986618,rice
